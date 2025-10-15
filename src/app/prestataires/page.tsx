@@ -1,8 +1,6 @@
-import { PrismaClient } from '../../generated/prisma';
 import PrestatairesList from './PrestatairesList';
 import Link from 'next/link';
-
-const prisma = new PrismaClient();
+import { prisma } from '../../../lib/db';
 
 async function getPrestataires() {
   try {

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, memo, useCallback, useMemo } from 'react';
+import Image from 'next/image';
 
 interface Prestataire {
   id: number;
@@ -24,19 +25,19 @@ interface PrestataireDetailProps {
   prestataire: Prestataire;
 }
 
-export default function PrestataireDetail({ prestataire }: PrestataireDetailProps) {
+const PrestataireDetail = memo(function PrestataireDetail({ prestataire }: PrestataireDetailProps) {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
 
-  const openWhatsApp = () => {
+  const openWhatsApp = useCallback(() => {
     if (!prestataire.telephone) return;
     
     const message = `Bonjour ${prestataire.nom} !\n\nJe suis intéressé(e) par vos services en ${prestataire.domaine}.\n\nPouvez-vous me donner plus d'informations sur vos prestations et tarifs ?\n\nMerci !`;
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${prestataire.telephone.replace(/\s/g, '')}?text=${encodedMessage}`;
     window.open(whatsappUrl, '_blank');
-  };
+  }, [prestataire.telephone, prestataire.nom, prestataire.domaine]);
 
-  const socialLinks = [
+  const socialLinks = useMemo(() => [
     { name: 'Site Web', url: prestataire.siteWeb, icon: '🌐', color: 'bg-blue-500 hover:bg-blue-600' },
     { name: 'LinkedIn', url: prestataire.linkedin, icon: '💼', color: 'bg-blue-700 hover:bg-blue-800' },
     { name: 'Twitter', url: prestataire.twitter, icon: '🐦', color: 'bg-sky-500 hover:bg-sky-600' },
@@ -44,18 +45,21 @@ export default function PrestataireDetail({ prestataire }: PrestataireDetailProp
     { name: 'Facebook', url: prestataire.facebook, icon: '📘', color: 'bg-blue-600 hover:bg-blue-700' }
   ].filter((link): link is { name: string; url: string; icon: string; color: string } => 
     link.url !== null && link.url !== undefined
-  );
+  ), [prestataire.siteWeb, prestataire.linkedin, prestataire.twitter, prestataire.instagram, prestataire.facebook]);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
       {/* Photos Section */}
       <div className="space-y-4">
         {/* Photo principale */}
-        <div className="relative">
-          <img
+        <div className="relative h-96">
+          <Image
             src={prestataire.photos[selectedPhotoIndex]}
             alt={`${prestataire.nom} - Photo ${selectedPhotoIndex + 1}`}
-            className="w-full h-96 object-cover rounded-lg shadow-lg"
+            fill
+            className="object-cover rounded-lg shadow-lg"
+            sizes="(max-width: 768px) 100vw, 50vw"
+            priority={true}
           />
           {/* Indicateur de photo active */}
           <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
@@ -80,14 +84,17 @@ export default function PrestataireDetail({ prestataire }: PrestataireDetailProp
               <button
                 key={index}
                 onClick={() => setSelectedPhotoIndex(index)}
-                className={`relative overflow-hidden rounded-lg transition-all duration-200 ${
+                className={`relative overflow-hidden rounded-lg transition-all duration-200 h-20 ${
                   index === selectedPhotoIndex ? 'ring-2 ring-blue-500' : 'hover:opacity-80'
                 }`}
               >
-                <img
+                <Image
                   src={photo}
                   alt={`${prestataire.nom} - Photo ${index + 1}`}
-                  className="w-full h-20 object-cover"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 25vw, 12.5vw"
+                  priority={false}
                 />
               </button>
             ))}
@@ -193,4 +200,6 @@ export default function PrestataireDetail({ prestataire }: PrestataireDetailProp
       </div>
     </div>
   );
-}
+});
+
+export default PrestataireDetail;

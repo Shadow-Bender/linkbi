@@ -34,5 +34,10 @@ model Prestataire {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  @@index([statut])
+  @@index([domaine])
+  @@index([ville])
+  @@index([note])
+  @@index([createdAt])
   @@map("prestataires")
 }

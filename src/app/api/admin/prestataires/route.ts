@@ -1,9 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '../../../../generated/prisma';
+import { NextResponse } from 'next/server';
+import { prisma } from '../../../../../lib/db';
 
-const prisma = new PrismaClient();
-
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Récupérer tous les prestataires avec tri par date de création
     const prestataires = await prisma.prestataire.findMany({
@@ -24,7 +22,11 @@ export async function GET(request: NextRequest) {
       }
     });
 
-    return NextResponse.json(prestataires);
+    return NextResponse.json(prestataires, {
+      headers: {
+        'Cache-Control': 'private, max-age=60, s-maxage=60',
+      }
+    });
   } catch (error) {
     console.error('Erreur lors de la récupération des prestataires admin:', error);
     return NextResponse.json(

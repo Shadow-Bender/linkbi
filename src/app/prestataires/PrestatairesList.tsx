@@ -1,6 +1,8 @@
 "use client";
 
 import Link from 'next/link';
+import Image from 'next/image';
+import { memo, useCallback } from 'react';
 
 interface Prestataire {
   id: number;
@@ -19,13 +21,13 @@ interface PrestatairesListProps {
   prestataires: Prestataire[];
 }
 
-export default function PrestatairesList({ prestataires }: PrestatairesListProps) {
-  const openWhatsApp = (prestataire: Prestataire) => {
+const PrestatairesList = memo(function PrestatairesList({ prestataires }: PrestatairesListProps) {
+  const openWhatsApp = useCallback((prestataire: Prestataire) => {
     const message = `Bonjour ${prestataire.nom} !\n\nJe suis intéressé(e) par vos services en ${prestataire.domaine}.\n\nPouvez-vous me donner plus d'informations sur vos prestations et tarifs ?\n\nMerci !`;
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${prestataire.telephone?.replace(/\s/g, '')}?text=${encodedMessage}`;
     window.open(whatsappUrl, '_blank');
-  };
+  }, []);
 
   if (prestataires.length === 0) {
     return (
@@ -37,7 +39,7 @@ export default function PrestatairesList({ prestataires }: PrestatairesListProps
         </div>
         <h3 className="mt-2 text-sm font-medium text-gray-900">Aucun prestataire trouvé</h3>
         <p className="mt-1 text-sm text-gray-500">
-          Il n'y a actuellement aucun prestataire dans la base de données.
+          Il n&apos;y a actuellement aucun prestataire dans la base de données.
         </p>
       </div>
     );
@@ -50,10 +52,13 @@ export default function PrestatairesList({ prestataires }: PrestatairesListProps
           {/* Photo du prestataire */}
           {prestataire.photos && prestataire.photos.length > 0 && (
             <div className="relative h-48 overflow-hidden rounded-t-lg">
-              <img
+              <Image
                 src={prestataire.photos[0]}
                 alt={prestataire.nom}
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                priority={false}
               />
               <div className="absolute top-3 right-3">
                 <Link
@@ -142,4 +147,6 @@ export default function PrestatairesList({ prestataires }: PrestatairesListProps
       ))}
     </div>
   );
-}
+});
+
+export default PrestatairesList;
