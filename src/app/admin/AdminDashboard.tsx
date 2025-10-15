@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface Prestataire {
   id: number;
@@ -228,11 +229,13 @@ export default function AdminDashboard({
                     <div className="flex items-center space-x-4">
                       {/* Photo */}
                       {prestataire.photos && prestataire.photos.length > 0 && (
-                        <div className="flex-shrink-0">
-                          <img
-                            className="h-12 w-12 rounded-lg object-cover"
+                        <div className="flex-shrink-0 relative h-12 w-12">
+                          <Image
+                            className="rounded-lg object-cover"
                             src={prestataire.photos[0]}
                             alt={prestataire.nom}
+                            fill
+                            sizes="48px"
                           />
                         </div>
                       )}

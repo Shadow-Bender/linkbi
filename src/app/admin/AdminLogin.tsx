@@ -54,7 +54,7 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
             Administration
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Connectez-vous pour accéder au panneau d'administration
+            Connectez-vous pour accéder au panneau d&apos;administration
           </p>
         </div>
 
@@ -131,7 +131,7 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
               href="/"
               className="font-medium text-blue-600 hover:text-blue-500"
             >
-              ← Retour à l'accueil
+              ← Retour à l&apos;accueil
             </Link>
           </div>
         </form>

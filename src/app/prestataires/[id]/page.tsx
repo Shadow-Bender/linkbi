@@ -1,14 +1,12 @@
-import { PrismaClient } from '../../../generated/prisma';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import PrestataireDetail from './PrestataireDetail';
-
-const prisma = new PrismaClient();
+import { prisma } from '../../../../lib/db';
 
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 async function getPrestataire(id: string) {
@@ -26,7 +24,8 @@ async function getPrestataire(id: string) {
 }
 
 export default async function PrestatairePage({ params }: PageProps) {
-  const prestataire = await getPrestataire(params.id);
+  const { id } = await params;
+  const prestataire = await getPrestataire(id);
 
   if (!prestataire) {
     notFound();

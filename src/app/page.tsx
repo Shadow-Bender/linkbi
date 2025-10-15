@@ -28,7 +28,7 @@ export default function Home() {
             Trouvez votre prestataire
           </h1>
           <p className="text-xl text-gray-600">
-            Recherchez par ville et domaine d'activité
+            Recherchez par ville et domaine d&apos;activité
           </p>
         </div>
 
@@ -53,7 +53,7 @@ export default function Home() {
             {/* Domaine Field */}
             <div>
               <label htmlFor="domaine" className="block text-sm font-medium text-gray-700 mb-2">
-                Domaine d'activité
+                Domaine d&apos;activité
               </label>
               <input
                 type="text"

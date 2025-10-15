@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '../../../generated/prisma';
-
-const prisma = new PrismaClient();
+import { prisma } from '../../../../lib/db';
 
 export async function POST(request: NextRequest) {
   try {
@@ -50,12 +48,40 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   try {
     const prestataires = await prisma.prestataire.findMany({
+      where: {
+        statut: 'valide'
+      },
       orderBy: {
-        createdAt: 'desc'
+        note: 'desc'
+      },
+      select: {
+        id: true,
+        nom: true,
+        domaine: true,
+        ville: true,
+        description: true,
+        note: true,
+        prix: true,
+        telephone: true,
+        email: true,
+        photos: true,
+        siteWeb: true,
+        linkedin: true,
+        twitter: true,
+        instagram: true,
+        facebook: true,
+        createdAt: true,
+        updatedAt: true
       }
     });
 
-    return NextResponse.json(prestataires);
+    return NextResponse.json(prestataires, {
+      headers: {
+        'Cache-Control': 'public, max-age=300, s-maxage=300, stale-while-revalidate=600',
+        'CDN-Cache-Control': 'max-age=300',
+        'Vercel-CDN-Cache-Control': 'max-age=300'
+      }
+    });
   } catch (error) {
     console.error('Erreur lors de la récupération des prestataires:', error);
     return NextResponse.json(

@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import AdminLogin from './AdminLogin';
-import AdminDashboard from './AdminDashboard';
+import { useState, useEffect, Suspense, lazy } from 'react';
+
+const AdminLogin = lazy(() => import('./AdminLogin'));
+const AdminDashboard = lazy(() => import('./AdminDashboard'));
 
 interface Prestataire {
   id: number;
@@ -23,7 +22,6 @@ export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [prestataires, setPrestataires] = useState<Prestataire[]>([]);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
 
   useEffect(() => {
     // Vérifier si l'utilisateur est connecté
@@ -118,15 +116,35 @@ export default function AdminPage() {
   }
 
   if (!isAuthenticated) {
-    return <AdminLogin onLogin={handleLogin} />;
+    return (
+      <Suspense fallback={
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Chargement...</p>
+          </div>
+        </div>
+      }>
+        <AdminLogin onLogin={handleLogin} />
+      </Suspense>
+    );
   }
 
   return (
-    <AdminDashboard
-      prestataires={prestataires}
-      onStatusChange={handleStatusChange}
-      onDelete={handleDelete}
-      onLogout={handleLogout}
-    />
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Chargement...</p>
+        </div>
+      </div>
+    }>
+      <AdminDashboard
+        prestataires={prestataires}
+        onStatusChange={handleStatusChange}
+        onDelete={handleDelete}
+        onLogout={handleLogout}
+      />
+    </Suspense>
   );
 }

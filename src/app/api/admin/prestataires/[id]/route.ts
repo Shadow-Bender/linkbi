@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '../../../../../generated/prisma';
-
-const prisma = new PrismaClient();
+import { prisma } from '../../../../../../lib/db';
 
 // Mettre à jour le statut d'un prestataire
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id: idParam } = await params;
+    const id = parseInt(idParam);
     const body = await request.json();
     const { statut } = body;
 
@@ -44,10 +43,11 @@ export async function PATCH(
 // Supprimer un prestataire
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id: idParam } = await params;
+    const id = parseInt(idParam);
 
     await prisma.prestataire.delete({
       where: { id }

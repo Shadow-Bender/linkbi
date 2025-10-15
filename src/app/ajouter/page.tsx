@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface FormData {
   nom: string;
@@ -188,7 +189,7 @@ export default function AjouterPrestatairePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label htmlFor="nom" className="block text-sm font-medium text-gray-700 mb-2">
-                  Nom de l'entreprise * <span className="text-red-500">*</span>
+                  Nom de l&apos;entreprise * <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -204,7 +205,7 @@ export default function AjouterPrestatairePage() {
 
               <div>
                 <label htmlFor="domaine" className="block text-sm font-medium text-gray-700 mb-2">
-                  Domaine d'activité * <span className="text-red-500">*</span>
+                  Domaine d&apos;activité * <span className="text-red-500">*</span>
                 </label>
                 <select
                   id="domaine"
@@ -388,7 +389,7 @@ export default function AjouterPrestatairePage() {
             {/* Upload de photos */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Photos de l'entreprise
+                Photos de l&apos;entreprise
               </label>
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
                 <input
@@ -407,7 +408,7 @@ export default function AjouterPrestatairePage() {
                     Cliquez pour sélectionner des photos
                   </p>
                   <p className="mt-1 text-xs text-gray-500">
-                    PNG, JPG, GIF jusqu'à 10MB
+                    PNG, JPG, GIF jusqu&apos;à 10MB
                   </p>
                 </label>
               </div>
@@ -433,11 +434,13 @@ export default function AjouterPrestatairePage() {
                   <h4 className="text-sm font-medium text-gray-700 mb-2">Photos sélectionnées:</h4>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {uploadedPhotos.map((photo, index) => (
-                      <div key={index} className="relative group">
-                        <img
+                      <div key={index} className="relative group h-24">
+                        <Image
                           src={photo}
                           alt={`Photo ${index + 1}`}
-                          className="w-full h-24 object-cover rounded-lg"
+                          fill
+                          className="object-cover rounded-lg"
+                          sizes="(max-width: 768px) 50vw, 25vw"
                         />
                         <button
                           type="button"
