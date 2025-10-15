@@ -1,21 +1,22 @@
-# dependencies
-node_modules
-
-# next
-.next
-out
-
-# env
-.env
-.env.local
-.env.*.local
-
-# logs
+# Node/Next.js
+node_modules/
+.next/
+out/
+dist/
+coverage/
 *.log
 
-# prisma
-src/generated/prisma
+# Environment
+.env
+.env.local
 
-# editor
-.vscode
-.DS_Store
+# Prisma local DBs
+prisma/dev.db
+prisma/dev.sqlite
+prisma/*.db
+prisma/*.sqlite
+prisma/*.db-journal
+prisma/*.sqlite-journal
+
+# Generated
+src/generated/
